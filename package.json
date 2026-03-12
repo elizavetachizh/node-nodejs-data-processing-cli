@@ -1,0 +1,24 @@
+{
+  "name": "node-nodejs-data-processing-cli",
+  "version": "1.0.0",
+  "description": "Node.js Data Processing CLI assignment repository",
+  "engines": {
+    "node": ">=24.10.0",
+    "npm": ">=10.9.2"
+  },
+  "keywords": [
+    "\"nodejs\""
+  ],
+  "homepage": "https://github.com/elizavetachizh/node-nodejs-data-processing-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elizavetachizh/node-nodejs-data-processing-cli.git"
+  },
+  "license": "ISC",
+  "author": "elizavetachizh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
