@@ -6,6 +6,14 @@ import {
   listCurrentDirectory,
   moveUpDirectory,
 } from "./navigation.js";
+import {
+  executeHashCommand,
+  InvalidInputError,
+  OperationFailedError,
+} from "./commands/hash.js";
+import { executeHashCompareCommand } from "./commands/hashCompare.js";
+import { executeCountCommand } from "./commands/count.js";
+import { parseCommandLine } from "./utils/argParser.js";
 
 const WELCOME_MESSAGE = "Welcome to Data Processing CLI!";
 const GOODBYE_MESSAGE = "Thank you for using Data Processing CLI!";
@@ -22,17 +30,6 @@ process.chdir(homedir());
 
 const printCurrentDirectory = () => {
   console.log(`You are currently in ${process.cwd()}`);
-};
-
-const parseCommandLine = (line) => {
-  const trimmedLine = line.trim();
-  const rawTokens = trimmedLine.match(/(?:[^\s"]+|"[^"]*")+/g) ?? [];
-  const tokens = rawTokens.map((token) => token.replace(/^"(.*)"$/, "$1"));
-
-  return {
-    command: tokens[0] ?? "",
-    args: tokens.slice(1),
-  };
 };
 
 let isShuttingDown = false;
@@ -96,6 +93,60 @@ rl.on("line", async (line) => {
       printCurrentDirectory();
     } catch {
       console.log(OPERATION_FAILED_MESSAGE);
+    }
+
+    rl.prompt();
+    return;
+  }
+
+  if (command === "hash") {
+    try {
+      await executeHashCommand(process.cwd(), args);
+      printCurrentDirectory();
+    } catch (error) {
+      if (error instanceof InvalidInputError) {
+        console.log(INVALID_INPUT_MESSAGE);
+      } else if (error instanceof OperationFailedError) {
+        console.log(OPERATION_FAILED_MESSAGE);
+      } else {
+        console.log(OPERATION_FAILED_MESSAGE);
+      }
+    }
+
+    rl.prompt();
+    return;
+  }
+
+  if (command === "hash-compare") {
+    try {
+      await executeHashCompareCommand(process.cwd(), args);
+      printCurrentDirectory();
+    } catch (error) {
+      if (error instanceof InvalidInputError) {
+        console.log(INVALID_INPUT_MESSAGE);
+      } else if (error instanceof OperationFailedError) {
+        console.log(OPERATION_FAILED_MESSAGE);
+      } else {
+        console.log(OPERATION_FAILED_MESSAGE);
+      }
+    }
+
+    rl.prompt();
+    return;
+  }
+
+  if (command === "count") {
+    try {
+      await executeCountCommand(process.cwd(), args);
+      printCurrentDirectory();
+    } catch (error) {
+      if (error instanceof InvalidInputError) {
+        console.log(INVALID_INPUT_MESSAGE);
+      } else if (error instanceof OperationFailedError) {
+        console.log(OPERATION_FAILED_MESSAGE);
+      } else {
+        console.log(OPERATION_FAILED_MESSAGE);
+      }
     }
 
     rl.prompt();

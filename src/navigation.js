@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { stat } from "node:fs/promises";
-import { dirname, isAbsolute, join } from "node:path";
 import process from "node:process";
+import { resolveParentDirectory, resolvePath } from "./utils/pathResolver.js";
 
 const COLLATOR = new Intl.Collator("en", { sensitivity: "base" });
 
@@ -28,12 +28,12 @@ export const listCurrentDirectory = async (cwd) => {
 };
 
 export const moveUpDirectory = (cwd) => {
-  const nextDirectory = dirname(cwd);
+  const nextDirectory = resolveParentDirectory(cwd);
   process.chdir(nextDirectory);
 };
 
 export const changeDirectory = async (cwd, targetPath) => {
-  const resolvedPath = isAbsolute(targetPath) ? targetPath : join(cwd, targetPath);
+  const resolvedPath = resolvePath(cwd, targetPath);
   const targetStats = await stat(resolvedPath);
 
   if (!targetStats.isDirectory()) {
