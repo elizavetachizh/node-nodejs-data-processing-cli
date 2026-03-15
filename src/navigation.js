@@ -1,6 +1,5 @@
 import { readdir } from "node:fs/promises";
 import { stat } from "node:fs/promises";
-import process from "node:process";
 import { resolveParentDirectory, resolvePath } from "./utils/pathResolver.js";
 
 const COLLATOR = new Intl.Collator("en", { sensitivity: "base" });
@@ -28,8 +27,7 @@ export const listCurrentDirectory = async (cwd) => {
 };
 
 export const moveUpDirectory = (cwd) => {
-  const nextDirectory = resolveParentDirectory(cwd);
-  process.chdir(nextDirectory);
+  return resolveParentDirectory(cwd);
 };
 
 export const changeDirectory = async (cwd, targetPath) => {
@@ -40,5 +38,5 @@ export const changeDirectory = async (cwd, targetPath) => {
     throw new Error("Target is not a directory");
   }
 
-  process.chdir(resolvedPath);
+  return resolvedPath;
 };
