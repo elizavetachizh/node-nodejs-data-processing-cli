@@ -76,5 +76,7 @@ export const executeCountCommand = async (cwd, args) => {
     throw new OperationFailedError("Failed to read input file");
   }
 
-  console.log(`Lines: ${stats.lines}/nWords: ${stats.words}/nCharacters: ${stats.characters}`);
+  console.log(`Lines: ${stats.lines}`);
+  console.log(`Words: ${stats.words}`);
+  console.log(`Characters: ${stats.characters}`);
 };
