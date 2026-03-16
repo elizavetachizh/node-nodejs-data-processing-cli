@@ -1,9 +1,13 @@
 import { homedir } from "node:os";
 import process from "node:process";
 import { createInterface } from "node:readline";
+import { startRepl } from "./repl.js";
 
 const WELCOME_MESSAGE = "Welcome to Data Processing CLI!";
 const GOODBYE_MESSAGE = "Thank you for using Data Processing CLI!";
+const state = {
+  currentWorkingDirectory: homedir(),
+};
 
 const rl = createInterface({
   input: process.stdin,
@@ -11,10 +15,8 @@ const rl = createInterface({
   prompt: "> ",
 });
 
-process.chdir(homedir());
-
 const printCurrentDirectory = () => {
-  console.log(`You are currently in ${process.cwd()}`);
+  console.log(`You are currently in ${state.currentWorkingDirectory}`);
 };
 
 let isShuttingDown = false;
@@ -34,14 +36,12 @@ console.log(WELCOME_MESSAGE);
 printCurrentDirectory();
 rl.prompt();
 
-rl.on("line", (line) => {
-  if (line.trim() === ".exit") {
-    shutdown();
-    return;
-  }
-
-  rl.prompt();
+startRepl({
+  rl,
+  state,
+  printCurrentDirectory,
+  shutdown,
 });
 
 rl.on("SIGINT", shutdown);
-// process.on("SIGINT", shutdown);
+process.on("SIGINT", shutdown);
